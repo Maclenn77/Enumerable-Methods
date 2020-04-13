@@ -17,8 +17,8 @@ module Enumerable
   def my_each_with_index
     i = 0
     loop do
-      self[i]
-      yield(self[i])
+      value = self[i]
+      yield(value, i)
       i += 1
       break if self[i].nil?
     end
