@@ -25,9 +25,9 @@ module Enumerable
   end
 
   def my_select
-    self.my_each do |i|
-      yield(i)
-    end
+    select = []
+    self.my_each do |i| select << if yield(i) end
+    select
   end
 
 # Problems with handling nil classes
@@ -77,11 +77,11 @@ module Enumerable
     count = 0
     value = arg
     if value.nil?
-      self.each do |i| count += 1 end
+      self.my_each do |i| count += 1 end
     elsif !value.nil?
-      self.select do |i| count += 1 if i == value end
+      self.my_select do |i| count += 1 if i == value end
     elsif block_given?
-      self.each do |i| count += 1 if yield(i) end
+      self.my_each do |i| count += 1 if yield(i) end
     else
         end
     count
