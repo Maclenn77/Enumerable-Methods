@@ -24,9 +24,10 @@ module Enumerable
     end
   end
 
+# Similar to Select
   def my_select
     select = []
-    self.my_each do |i| select << if yield(i) end
+    self.my_each do |i| if yield(i) then select << yield(i) end end
     select
   end
 
@@ -41,6 +42,7 @@ module Enumerable
     else
       yield(self[i])
     end
+  end
 
 #Checked on repl.it. It's working
     def my_any?
@@ -87,6 +89,7 @@ module Enumerable
     count
   end
 
+# My Map
   def my_map
     arr = []
     self.my_each do |i|
@@ -103,21 +106,19 @@ module Enumerable
       index = arg
     end
     result = self[index]
-    until self[index].nil?
-      if self[index + 1].nil?
-        element = 0
-        result = yield(result, element)
-      else
-        element = self[index + 1]
-        result = yield(result, element)
-      end
+    until self[index + 1].nil?
+      element = self[index + 1]
+      result = yield(result, element)
       index += 1
     end
     result
   end
-
 end
 
+def multiply_els(arr)
+    multiply = arr.my_inject do |result, element| result * element end
+    multiply
 end
+
 bar = "======================"
 # test methods
