@@ -31,7 +31,7 @@ module Enumerable
   end
 
 # Problems with handling nil classes
-  def my_all
+  def my_all?
     i = 0
     while yield(self[i])
       i += 1
@@ -85,6 +85,35 @@ module Enumerable
     else
         end
     count
+  end
+
+  def my_map
+    arr = []
+    self.my_each do |i|
+      arr << yield(i)
+    end
+    arr
+  end
+
+# My inject
+  def my_inject(arg=nil)
+    if arg.nil?
+      index = 0
+    else
+      index = arg
+    end
+    result = self[index]
+    until self[index].nil?
+      if self[index + 1].nil?
+        element = 0
+        result = yield(result, element)
+      else
+        element = self[index + 1]
+        result = yield(result, element)
+      end
+      index += 1
+    end
+    result
   end
 
 end
