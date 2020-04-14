@@ -30,22 +30,35 @@ module Enumerable
     end
   end
 
+# Problems with handling nil classes
   def my_all
-  i=0
-    self.my_each do |i|
-      while yield(i)
-        next
-        if !yield(i)
-          i = false
-          yield(i)
-        end
-        if i.nil?
-          i = true
-          yield(i)
+    i = 0
+    while yield(self[i])
+      i += 1
+    end
+    if yield(self[i]).nil?
+      yield
+    else
+      yield(self[i])
+    end
+
+#Checked on repl.it. It's working
+    def my_any?
+      i = 0
+      if self[i].nil?
+        return false
+      end
+      until yield(self[i])
+        i += 1
+        if self[i].nil?
+          return false
+        else
+          next
         end
       end
+      yield(self[i])
     end
-  end
+end
 
 end
 bar = "======================"
