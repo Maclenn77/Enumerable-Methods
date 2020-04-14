@@ -29,6 +29,24 @@ module Enumerable
       yield(i)
     end
   end
+
+  def my_all
+  i=0
+    self.my_each do |i|
+      while yield(i)
+        next
+        if !yield(i)
+          i = false
+          yield(i)
+        end
+        if i.nil?
+          i = true
+          yield(i)
+        end
+      end
+    end
+  end
+
 end
 bar = "======================"
 # test methods
@@ -50,3 +68,5 @@ puts "My select"
 [1,3,4,5,6].my_select do |i| puts i.to_s + " > " + "even" if i.even? end
 puts bar
 [1,3,4,5,6].select do |i| puts i.to_s + " > " + "even" if i.even? end
+puts bar
+[1,3,4,5,6].my_all do |i| i.even? end
