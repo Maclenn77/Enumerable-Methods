@@ -52,12 +52,26 @@ module Enumerable
         i += 1
         if self[i].nil?
           return false
-        else
-          next
         end
       end
       yield(self[i])
     end
+
+    def my_none?
+      i = 0
+      if self[i].nil?
+        return true
+      end
+      until yield(self[i])
+        i += 1
+        if self[i].nil?
+          return true
+        end
+      end
+      false
+      
+end
+
 end
 
 end
