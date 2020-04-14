@@ -57,6 +57,7 @@ module Enumerable
       yield(self[i])
     end
 
+# Returns true if none item is true
     def my_none?
       i = 0
       if self[i].nil?
@@ -69,31 +70,25 @@ module Enumerable
         end
       end
       false
-      
-end
+    end
+
+# Returns number of items
+  def my_count(arg=nil)
+    count = 0
+    value = arg
+    if value.nil?
+      self.each do |i| count += 1 end
+    elsif !value.nil?
+      self.select do |i| count += 1 if i == value end
+    elsif block_given?
+      self.each do |i| count += 1 if yield(i) end
+    else
+        end
+    count
+  end
 
 end
 
 end
 bar = "======================"
 # test methods
-puts "Each"
-puts bar
-puts "My each"
-[1,3,4,5,6].my_each do |i| puts i end
-puts bar
-[1,3,4,5,6].each do |i| puts i end
-puts "Each with index"
-puts bar
-puts "My each with index"
-[1,3,4,5,6].my_each_with_index do |i, index| puts i.to_s + " " + index.to_s end
-puts bar
-[1,3,4,5,6].each_with_index do |i, index| puts i.to_s + " " + index.to_s end
-puts "Select"
-puts bar
-puts "My select"
-[1,3,4,5,6].my_select do |i| puts i.to_s + " > " + "even" if i.even? end
-puts bar
-[1,3,4,5,6].select do |i| puts i.to_s + " > " + "even" if i.even? end
-puts bar
-[1,3,4,5,6].my_all do |i| i.even? end
