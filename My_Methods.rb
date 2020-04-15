@@ -2,7 +2,7 @@
 module Enumerable
 # Similar to each
   def my_each
-    raise "Enumerator" unless block_given?
+    raise "Enumerators needs a block for iterating #{self}" unless block_given?
 
     i = 0
     loop do
@@ -15,6 +15,8 @@ module Enumerable
 
 # similar to each_with_index
   def my_each_with_index
+    raise "Enumerators needs a block for iterating #{self}" unless block_given?
+
     i = 0
     loop do
       value = self[i]
@@ -26,6 +28,8 @@ module Enumerable
 
 # Similar to Select
   def my_select
+    raise "Enumerators needs a block for iterating #{self}" unless block_given?
+
     select = []
     self.my_each do |i| if yield(i) then select << yield(i) end end
     select
@@ -33,6 +37,8 @@ module Enumerable
 
 # Problems with handling nil classes
   def my_all?
+    raise "Enumerators needs a block for iterating #{self}" unless block_given?
+
     i = 0
     while yield(self[i])
       i += 1
@@ -46,6 +52,8 @@ module Enumerable
 
 #Checked on repl.it. It's working
     def my_any?
+      raise "Enumerators needs a block for iterating #{self}" unless block_given?
+
       i = 0
       if self[i].nil?
         return false
@@ -61,6 +69,8 @@ module Enumerable
 
 # Returns true if none item is true
     def my_none?
+      raise "Enumerators needs a block for iterating #{self}" unless block_given?
+
       i = 0
       if self[i].nil?
         return true
@@ -76,6 +86,8 @@ module Enumerable
 
 # Returns number of items
   def my_count(arg=nil)
+    raise "Enumerators needs a block for iterating #{self}" unless block_given?
+
     count = 0
     value = arg
     if value.nil?
@@ -91,6 +103,8 @@ module Enumerable
 
 # My Map
   def my_map
+    raise "Enumerators needs a block for iterating #{self}" unless block_given?
+
     arr = []
     self.my_each do |i|
       arr << yield(i)
@@ -99,6 +113,8 @@ module Enumerable
   end
 
   def my_map_proc(&proc)
+    raise "Enumerators needs a block for iterating #{self}" unless block_given?
+
     arr = []
     self.my_each do |i|
       arr << proc.call(i)
@@ -107,6 +123,8 @@ module Enumerable
   end
 
   def my_map_proc_yield(&proc)
+    raise "Enumerators needs a block for iterating #{self}" unless block_given?
+
     arr = []
     proc = proc.call(i) || yield(i)
     self.my_each do |i|
