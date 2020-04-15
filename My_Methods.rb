@@ -86,8 +86,7 @@ module Enumerable
 
 # Returns number of items
   def my_count(arg=nil)
-    raise "Enumerators needs a block for iterating #{self}" unless block_given?
-
+    
     count = 0
     value = arg
     if value.nil?
