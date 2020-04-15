@@ -98,6 +98,23 @@ module Enumerable
     arr
   end
 
+  def my_map_proc(&proc)
+    arr = []
+    self.my_each do |i|
+      arr << proc.call(i)
+    end
+    arr
+  end
+
+  def my_map_proc_yield(&proc)
+    arr = []
+    proc = proc.call(i) || yield(i)
+    self.my_each do |i|
+      arr << proc
+    end
+    arr
+  end
+
 # My inject
   def my_inject(arg=nil)
     if arg.nil?
@@ -119,6 +136,8 @@ def multiply_els(arr)
     multiply = arr.my_inject do |result, element| result * element end
     multiply
 end
+
+my_sqr = Proc.new { |arg| arg ** 2}
 
 bar = "======================"
 # test methods
