@@ -14,7 +14,9 @@ In this project, methods like Enumerables were created. They required a block fo
 - **my_inject** Apply a process to two items, keep the result and applied to the next one.
 - **mupliply_els** Multiply the items of a given Enumerable between them
 
-![screenshot](https://user-images.githubusercontent.com/60085697/79005961-66b3e880-7b2e-11ea-8216-8d8c6994ae88.png)
+## Screenshot
+
+![Enumerable](https://user-images.githubusercontent.com/1808402/79390056-a0bd2a00-7f34-11ea-9456-9407791e4a02.png)
 
 ## Built With
 
@@ -23,7 +25,7 @@ In this project, methods like Enumerables were created. They required a block fo
 
 ## Getting Started
 
-To get a local copy up and running, clone this pr.
+To get a local copy up and running, clone this repo and test it in IRB, or add like a module in your projects.
 
 ### Prerequisites
 - OS: MacOS, Ubuntu or a Virtual Machine
