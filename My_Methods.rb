@@ -71,43 +71,43 @@ module Enumerable
   def my_count(arg = nil)
     count = 0
     value = arg
-    count += 1 if value.nil?
 
-    my_select { |i| count += 1 if i == value } if !value.nil?
+    my_each { |i| count += 1 if i } unless block_given? or value
 
-    my_each { |i| count += 1 if yield(i) } if block_given?
+    my_select { |i| count += 1 if i == value } unless value.nil?
+
+    my_select { |i| count += 1 if yield(i) } if block_given?
 
     count
   end
 
   # My Map
   def my_map
-    raise "Enumerators needs a block for iterating #{self}" unless block_given?
+    return enum_for unless block_given?
 
     arr = []
-    self.my_each do |i|
+    my_each do |i|
       arr << yield(i)
     end
     arr
   end
 
   def my_map_proc(&proc)
-    raise "Enumerators needs a block for iterating #{self}" unless block_given?
+    return enum_for unless block_given?
 
     arr = []
-    self.my_each do |i|
+    my_each do |i|
       arr << proc.call(i)
     end
     arr
   end
 
   def my_map_proc_yield(&proc)
-    raise "Enumerators needs a block for iterating #{self}" unless block_given?
+    return enum_for unless block_given?
 
     arr = []
-    proc = proc.call(i) || yield(i)
-    self.my_each do |i|
-      arr << proc
+    my_each do |i|
+      arr << proc.call(i) || yield(i)
     end
     arr
   end
