@@ -1,8 +1,8 @@
 #!/usr/bin/ruby
 module Enumerable
-# Similar to each
+  # Similar to each
   def my_each
-    raise "Enumerators needs a block for iterating #{self}" unless block_given?
+    return enum_for unless block_given?
 
     i = 0
     loop do
@@ -13,9 +13,9 @@ module Enumerable
     end
   end
 
-# similar to each_with_index
+  # similar to each_with_index
   def my_each_with_index
-    raise "Enumerators needs a block for iterating #{self}" unless block_given?
+    return enum_for unless block_given?
 
     i = 0
     loop do
@@ -26,81 +26,61 @@ module Enumerable
     end
   end
 
-# Similar to Select
+  # Similar to Select
   def my_select
-    raise "Enumerators needs a block for iterating #{self}" unless block_given?
+    return enum_for unless block_given?
 
     select = []
-    self.my_each do |i| if yield(i) then select << yield(i) end end
+    my_each { |i| select << i if yield(i) }
     select
   end
 
-# Problems with handling nil classes
+  # Problems with handling nil classes
   def my_all?
-    raise "Enumerators needs a block for iterating #{self}" unless block_given?
+    return enum_for unless block_given?
 
-    i = 0
-    while yield(self[i])
-      i += 1
-    end
-    if yield(self[i]).nil?
-      yield
-    else
-      yield(self[i])
-    end
+    count = 0
+    count += 1 while yield(self[count])
+    count == length
   end
 
-#Checked on repl.it. It's working
-    def my_any?
-      raise "Enumerators needs a block for iterating #{self}" unless block_given?
+  # Checked on repl.it. It's working
+  def my_any?
+    return enum_for unless block_given?
 
-      i = 0
-      if self[i].nil?
-        return false
-      end
-      until yield(self[i])
-        i += 1
-        if self[i].nil?
-          return false
-        end
-      end
-      yield(self[i])
-    end
+    count = 0
+    i = 0
+    i += 1 unless yield(self[i]) or yield(self[i]).nil?
+    count += 1 if yield(self[i])
+    count.positive?
+  end
 
-# Returns true if none item is true
-    def my_none?
-      raise "Enumerators needs a block for iterating #{self}" unless block_given?
+  # Returns true if none item is true
+  def my_none?
+    return enum_for unless block_given?
 
-      i = 0
-      if self[i].nil?
-        return true
-      end
-      until yield(self[i])
-        i += 1
-        if self[i].nil?
-          return true
-        end
-      end
-      false
-    end
+    result = false
+    i = 0
+    i += 1 until yield(self[i]) or self[i].nil?
+    result = true if self[i].nil?
+    result = false if yield(self[i])
+    result
+  end
 
-# Returns number of items
-  def my_count(arg=nil)
-    
+  # Returns number of items
+  def my_count(arg = nil)
     count = 0
     value = arg
-    if value.nil?
-      self.my_each do |i| count += 1 end
-    elsif !value.nil?
-      self.my_select do |i| count += 1 if i == value end
-    elsif block_given?
-      self.my_each do |i| count += 1 if yield(i) end
-    else
-        end
+    count += 1 if value.nil?
+
+    my_select { |i| count += 1 if i == value } if !value.nil?
+
+    my_each { |i| count += 1 if yield(i) } if block_given?
+
     count
   end
 
-# My Map
+  # My Map
   def my_map
     raise "Enumerators needs a block for iterating #{self}" unless block_given?
 
@@ -132,13 +112,10 @@ module Enumerable
     arr
   end
 
-# My inject
-  def my_inject(arg=nil)
-    if arg.nil?
-      index = 0
-    else
-      index = arg
-    end
+  # My inject
+  def my_inject(arg = nil)
+    index = 0 if arg.nil? || index = arg
+
     result = self[index]
     until self[index + 1].nil?
       element = self[index + 1]
@@ -157,4 +134,3 @@ end
 my_sqr = Proc.new { |arg| arg ** 2}
 
 bar = "======================"
-# test methods
