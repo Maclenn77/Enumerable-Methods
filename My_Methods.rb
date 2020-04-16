@@ -72,11 +72,11 @@ module Enumerable
     count = 0
     value = arg
 
-    my_each { |i| count += 1 if i } unless block_given? or value
-
-    my_select { |i| count += 1 if i == value } unless value.nil?
+    my_each { count += 1 } unless block_given? or value
 
     my_select { |i| count += 1 if yield(i) } if block_given?
+
+    my_select { |i| count += 1 if i == value }
 
     count
   end
