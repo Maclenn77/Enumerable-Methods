@@ -114,7 +114,8 @@ module Enumerable
 
   # My inject
   def my_inject(arg = nil)
-    index = 0 if arg.nil? || index = arg
+    index = arg
+    index = 0 if arg.nil?
 
     result = self[index]
     until self[index + 1].nil?
@@ -127,10 +128,6 @@ module Enumerable
 end
 
 def multiply_els(arr)
-    multiply = arr.my_inject do |result, element| result * element end
-    multiply
+  multiply = arr.my_inject { |result, element| result * element }
+  multiply
 end
-
-my_sqr = Proc.new { |arg| arg ** 2}
-
-bar = "======================"
