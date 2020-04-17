@@ -36,13 +36,16 @@ module Enumerable
   end
 
   # Problems with handling nil classes
-  def my_all?
-    return enum_for unless block_given?
+  def my_all?(arg = nil)
 
     count = 0
+    count = length if !block_given? && !arg
+    count +=1 while self[count].is_a? arg
     count += 1 while yield(self[count])
+  rescue
     count == length
   end
+
 
   # Checked on repl.it. It's working
   def my_any?
