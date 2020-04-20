@@ -37,15 +37,21 @@ module Enumerable
 
   # Problems with handling nil classes
   def my_all?(arg = nil)
-
+    check = arg
+    checker = proc { |n| check === n }
     count = 0
-    count = length if !block_given? && !arg
-    count +=1 while self[count].is_a? arg
-    count += 1 while yield(self[count])
+
+    if check
+      count += 1 while checker.call(self[count])
+    elsif block_given?
+      count += 1 while proc.call(self[count])
+    else
+      count += 1 while self[count]
+    end
+    count == length
   rescue
     count == length
   end
-
 
   # Checked on repl.it. It's working
   def my_any?
