@@ -66,14 +66,9 @@ module Enumerable
 
   # Returns true if none item is true
   def my_none?
-    return enum_for unless block_given?
+    return !my_all?(arg) unless block_given?
 
-    result = false
-    i = 0
-    i += 1 until yield(self[i]) or self[i].nil?
-    result = true if self[i].nil?
-    result = false if yield(self[i])
-    result
+    !my_all?(&proc)
   end
 
   # Returns number of items
