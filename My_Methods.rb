@@ -68,10 +68,10 @@ module Enumerable
   end
 
   # Returns true if none item is true
-  def my_none?
-    return !my_all?(arg) unless block_given?
+  def my_none?(arg = nil)
+    return !my_any?(arg) unless block_given?
 
-    !my_all?(&proc)
+    !my_any?(&proc)
   end
 
   # Returns number of items
