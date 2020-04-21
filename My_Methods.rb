@@ -36,8 +36,8 @@ module Enumerable
   end
 
   # Problems with handling nil classes
-  def my_all?(arg = nil)
-    check = arg
+  def my_all?(check = nil)
+
     checker = proc { |n| check === n }
     count = 0
 
@@ -54,14 +54,17 @@ module Enumerable
   end
 
   # Checked on repl.it. It's working
-  def my_any?
-    return enum_for unless block_given?
-
-    count = 0
+  def my_any?(check = nil)
     i = 0
-    i += 1 unless yield(self[i]) or yield(self[i]).nil?
-    count += 1 if yield(self[i])
-    count.positive?
+    checker = proc { |n| check === n }
+    if check
+      i += 1 until checker.call(self[i]) or i == length
+    elsif block_given?
+      i += 1 until yield(self[i]) or i == length
+    else
+      i += 1 until self[i] or i == length
+    end
+    i < length
   end
 
   # Returns true if none item is true
