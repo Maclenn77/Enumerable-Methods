@@ -3,6 +3,7 @@ module Enumerable
   # Similar to each
   def my_each
     return enum_for unless block_given?
+
     arr = to_a
     i = 0
     loop do
@@ -16,8 +17,8 @@ module Enumerable
   # similar to each_with_index
   def my_each_with_index
     return enum_for unless block_given?
-    arr = to_a
 
+    arr = to_a
     i = 0
     loop do
       value = arr[i]
@@ -38,35 +39,30 @@ module Enumerable
 
   # Problems with handling nil classes
   def my_all?(check = nil)
-    arr = to_a
-    checker = proc { |n| check === n }
     count = 0
 
     if check
-      count += 1 while checker.call(arr[count])
+      my_each { |n| count += 1 if check === n }
     elsif block_given?
-      count += 1 while proc.call(arr[count])
+      my_each { |n| count += 1 if proc.call(n) }
     else
-      count += 1 while arr[count]
+      my_each { |n| count += 1 if n }
     end
-    count == length
-  rescue
-    count == length
+    count == size
   end
 
   # Checked on repl.it. It's working
   def my_any?(check = nil)
-    arr = to_a
     i = 0
-    checker = proc { |n| check === n }
+
     if check
-      i += 1 until checker.call(arr[i]) or i == length
+      my_each { |n| i += 1 if check === n }
     elsif block_given?
-      i += 1 until yield(arr[i]) or i == length
+      my_each { |n| i += 1 if yield(n) }
     else
-      i += 1 until arr[i] or i == length
+      my_each { |n| i += 1 if n }
     end
-    i < length
+    i.positive?
   end
 
   # Returns true if none item is true
@@ -126,13 +122,13 @@ module Enumerable
     arr = to_a
     result = arr[0]
     result = parameter[0] + arr[0] if parameter[0].is_a? Numeric
-    op = parameter[-1] if parameter[-1].is_a? Symbol
     arr = arr[1..-1]
 
     if parameter[-1].is_a? Symbol
-      arr.each { |n| result = result.send(op, n) }
+      op = parameter[-1]
+      arr.my_each { |n| result = result.send(op, n) }
     else
-      arr.each { |x| result = proc.call(result, x) }
+      arr.my_each { |x| result = proc.call(result, x) }
     end
     result
   end
