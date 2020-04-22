@@ -11,6 +11,7 @@ module Enumerable
       yield(arr[i])
       i += 1
     end
+    self
   end
 
   # similar to each_with_index
