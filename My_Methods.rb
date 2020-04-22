@@ -3,26 +3,27 @@ module Enumerable
   # Similar to each
   def my_each
     return enum_for unless block_given?
-
+    arr = to_a
     i = 0
     loop do
-      self[i]
-      yield(self[i])
+      arr[i]
+      yield(arr[i])
       i += 1
-      break if self[i].nil?
+      break if i == length
     end
   end
 
   # similar to each_with_index
   def my_each_with_index
     return enum_for unless block_given?
+    arr = to_a
 
     i = 0
     loop do
-      value = self[i]
+      value = arr[i]
       yield(value, i)
       i += 1
-      break if self[i].nil?
+      break if i == length
     end
   end
 
@@ -37,16 +38,16 @@ module Enumerable
 
   # Problems with handling nil classes
   def my_all?(check = nil)
-
+    arr = to_a
     checker = proc { |n| check === n }
     count = 0
 
     if check
-      count += 1 while checker.call(self[count])
+      count += 1 while checker.call(arr[count])
     elsif block_given?
-      count += 1 while proc.call(self[count])
+      count += 1 while proc.call(arr[count])
     else
-      count += 1 while self[count]
+      count += 1 while arr[count]
     end
     count == length
   rescue
@@ -55,14 +56,15 @@ module Enumerable
 
   # Checked on repl.it. It's working
   def my_any?(check = nil)
+    arr = to_a
     i = 0
     checker = proc { |n| check === n }
     if check
-      i += 1 until checker.call(self[i]) or i == length
+      i += 1 until checker.call(arr[i]) or i == length
     elsif block_given?
-      i += 1 until yield(self[i]) or i == length
+      i += 1 until yield(arr[i]) or i == length
     else
-      i += 1 until self[i] or i == length
+      i += 1 until arr[i] or i == length
     end
     i < length
   end
@@ -120,15 +122,23 @@ module Enumerable
   end
 
   # My inject
-  def my_inject(arg = nil)
-    index = arg
-    index = 0 if arg.nil?
+  def my_inject(start = 0, *operator)
+    i = 0
+    result = start
+    arr = to_a
 
-    result = self[index]
-    until self[index + 1].nil?
-      element = self[index + 1]
+    if operator
+      operation = proc { |prod, element| prod.send(operator, element)}
+      until i + 1 == length
+        element = arr[i + 1]
+        result = operation.call(result, element)
+        i += 1
+      end
+    else
+      until i + 1 == length
+      element = arr[i + 1]
       result = yield(result, element)
-      index += 1
+      i += 1
     end
     result
   end
