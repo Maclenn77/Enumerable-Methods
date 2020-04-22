@@ -122,23 +122,17 @@ module Enumerable
   end
 
   # My inject
-  def my_inject(start = 0, *operator)
-    i = 0
-    result = start
+  def my_inject(*parameter)
     arr = to_a
+    result = arr[0]
+    result = parameter[0] + arr[0] if parameter[0].is_a? Numeric
+    op = parameter[-1] if parameter[-1].is_a? Symbol
+    arr = arr[1..-1]
 
-    if operator
-      operation = proc { |prod, element| prod.send(operator, element)}
-      until i + 1 == length
-        element = arr[i + 1]
-        result = operation.call(result, element)
-        i += 1
-      end
+    if parameter[-1].is_a? Symbol
+      arr.each { |n| result = result.send(op, n) }
     else
-      until i + 1 == length
-      element = arr[i + 1]
-      result = yield(result, element)
-      i += 1
+      arr.each { |x| result = proc.call(result, x) }
     end
     result
   end
