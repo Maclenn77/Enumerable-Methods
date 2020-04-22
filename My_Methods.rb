@@ -20,11 +20,10 @@ module Enumerable
 
     arr = to_a
     i = 0
-    loop do
+    until i == size
       value = arr[i]
       yield(value, i)
       i += 1
-      break if i == size
     end
     self
   end
