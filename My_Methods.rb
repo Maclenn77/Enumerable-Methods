@@ -6,11 +6,10 @@ module Enumerable
 
     arr = to_a
     i = 0
-    loop do
+    until i == size
       arr[i]
       yield(arr[i])
       i += 1
-      break if i == length
     end
   end
 
