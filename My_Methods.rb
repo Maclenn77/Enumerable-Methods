@@ -24,8 +24,9 @@ module Enumerable
       value = arr[i]
       yield(value, i)
       i += 1
-      break if i == length
+      break if i == size
     end
+    self
   end
 
   # Similar to Select
