@@ -121,13 +121,13 @@ module Enumerable
   def my_inject(*parameter)
     arr = to_a
     result = arr[0]
-    result = parameter[0] + arr[0] if parameter[0].is_a? Numeric
     arr = arr[1..-1]
 
     if parameter[-1].is_a? Symbol
-      op = parameter[-1]
-      arr.my_each { |n| result = result.send(op, n) }
+      result = result.send(parameter[-1], parameter[0]) if parameter[0].is_a? Numeric
+      arr.my_each { |n| result = result.send(parameter[-1], n) }
     else
+      result = proc.call(parameter[0], result) if parameter[0].is_a? Numeric
       arr.my_each { |x| result = proc.call(result, x) }
     end
     result
